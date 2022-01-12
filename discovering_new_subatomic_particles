@@ -25,15 +25,15 @@ print("names was run\n")
 #############################
 
 #Print the groups
-print(names)
+print(names,"\n")
 
 #Get the groups
 muon1= fid["muon1"]
 muon2= fid["muon2"]
 
 #Print the datasets
-print(keys(muon1))
-print(keys(muon2))
+print(keys(muon1),"\n")
+print(keys(muon2),"\n")
 
 #Get the datasets
 E1 = muon1["e"][]
@@ -41,18 +41,17 @@ px1 = muon1["px"][]
 py1 = muon1["py"][]
 pz1 = muon1["pz"][]
 charge1 = muon1["q"][]
-print("muon1 dataset run\n")
 
 E2 = muon2["e"][]
 px2 = muon2["px"][]
 py2 = muon2["py"][]
 pz2 = muon2["pz"][]
 charge2 = muon2["q"][]
-print("muon2 dataset run\n")
 
 
 ###
 # Challenge 1 - Classical mechanics
+# Part A
 ###
 p= px1.^2
 pmag1 = sqrt.(px1.^2 + py1.^2 + pz1.^2)
@@ -64,10 +63,10 @@ m2=(pmag2.^2)./(2*E2)
 p1= histogram(m1, bins=1000, xlims=(-1,75), xlabel= "Mass of muon #1 (GeV/c^2)", color= :red, lc=:match)
 p2= histogram(m2, bins=1000, xlims=(-1,75), xlabel= "Mass of muon #2 (GeV/c^2)", color= :blue, lc=:match)
 Plots.plot(p1,p2,layout=(1,2), legend=false)
-savefig("m1_and_m2.png")
-print("m1 and m2 run")
+savefig("Part_1A.png")
+
 ###
-#Part B
+# Part B
 ###
 
 E = E1 + E2
@@ -79,14 +78,95 @@ charge = charge1 + charge2
 pmag = sqrt.(px.^2 + py.^2 + pz.^2)
 m = (pmag.^2)./(2*E)
 
-mask_pos2= m==2
-mask_neg2= m==-2
-mask_0= m==0
-print("masks run")
+p1= histogram(m, bins=LinRange(0,50,100), label= "All charge combinations", xlabel="Mass (GeV/c^2)", lc=:match)
+p2= histogram(m[charge.==2], bins=LinRange(0,50,100), label= "2+", xlabel="Mass (GeV/c^2)", lc=:match)
+p3= histogram(m[charge.==-2], bins=LinRange(0,50,100), label= "2-", xlabel="Mass (GeV/c^2)", lc=:match)
+p4= histogram(m[charge.==0], bins=LinRange(0,50,100), label= "Electrically neutral", xlabel="Mass (GeV/c^2)", lc=:match)
+Plots.plot(p1,p2,p3,p4,layout=(4,1), legend=true)
+savefig("Part_1B.png")
 
-p1= histogram(m, bins=1000, xlims=(-1,50), xlabel= "All charge combinations", lc=:match)
-print("p1 run")
-p2= histogram(m[mask_pos2], bins=1000, xlims=(-1,50), xlabel= "2+", lc=:match)
-print("p2 run")
+###
+# Challenge 2 - special relativity
+# Part A
+###
+
+function invmass(E,pmag)
+    m2= E.^2 .- pmag.^2
+    pos= sqrt.(m2[m2.>=0])
+    neg= -sqrt.(-m2[m2.<0])
+    return pos,neg
+end
+
+
+pos1,neg1= invmass(E1,pmag1)
+#print("Pos1: ",length(pos1),"\n")   
+#print("Neg1: ",length(neg1),"\n")    
+
+pos2,neg2= invmass(E2,pmag2)
+#print("Pos2: ",length(pos2),"\n")   
+#print("Neg2: ",length(neg2),"\n")   
+
+m1_sr= [pos1;neg1]
+m2_sr= [pos2;neg2]
+
+#print("m1_sr: ",length(m1_sr),"\n")   
+#print("m2_sr: ",length(m2_sr),"\n")
+
+
+p1= histogram(m1_sr, bins=LinRange(0,0.2,50), xlabel="Mass of muon #1 (GeV/c^2)", lc=:match)
+p2= histogram(m2_sr, bins=LinRange(0,0.2,50), xlabel="Mass of muon #2 (GeV/c^2)", lc=:match)
 Plots.plot(p1,p2,layout=(1,2), legend=false)
-savefig("Part_B.png")
+savefig("Part_2A.png")
+
+###
+# Part B
+###
+
+m_sr = sqrt.(E.^2 .- pmag.^2)
+
+# mass = 0-120
+lo = 0
+hi = 120
+
+p1= histogram(m_sr, bins=LinRange(lo,hi,100), label= "All charge combinations", xlabel="Mass (GeV/c^2)", lc=:match)
+p2= histogram(m_sr[charge.==2], bins=LinRange(lo,hi,100), label= "2+", xlabel="Mass (GeV/c^2)", lc=:match)
+p3= histogram(m_sr[charge.==-2], bins=LinRange(lo,hi,100), label= "2-", xlabel="Mass (GeV/c^2)", lc=:match)
+p4= histogram(m_sr[charge.==0], bins=LinRange(lo,hi,100), label= "Electrically neutral", xlabel="Mass (GeV/c^2)", lc=:match)
+Plots.plot(p1,p2,p3,p4,layout=grid(2,2), legend=true)
+plot!(size=(800,450))
+savefig("Part_2B1.png")
+
+# mass = 2-4
+lo = 2
+hi = 4
+
+p1= histogram(m_sr, bins=LinRange(lo,hi,100), label= "All charge combinations", xlabel="Mass (GeV/c^2)", lc=:match)
+p2= histogram(m_sr[charge.==2], bins=LinRange(lo,hi,100), label= "2+", xlabel="Mass (GeV/c^2)", lc=:match)
+p3= histogram(m_sr[charge.==-2], bins=LinRange(lo,hi,100), label= "2-", xlabel="Mass (GeV/c^2)", lc=:match)
+p4= histogram(m_sr[charge.==0], bins=LinRange(lo,hi,100), label= "Electrically neutral", xlabel="Mass (GeV/c^2)", lc=:match)
+Plots.plot(p1,p2,p3,p4,layout=grid(2,2), legend=true)
+plot!(size=(800,450))
+savefig("Part_2B2.png")
+
+# mass = 8-12
+lo = 8
+hi = 12
+
+p1= histogram(m_sr, bins=LinRange(lo,hi,100), label= "All charge combinations", xlabel="Mass (GeV/c^2)", lc=:match)
+p2= histogram(m_sr[charge.==2], bins=LinRange(lo,hi,100), label= "2+", xlabel="Mass (GeV/c^2)", lc=:match)
+p3= histogram(m_sr[charge.==-2], bins=LinRange(lo,hi,100), label= "2-", xlabel="Mass (GeV/c^2)", lc=:match)
+p4= histogram(m_sr[charge.==0], bins=LinRange(lo,hi,100), label= "Electrically neutral", xlabel="Mass (GeV/c^2)", lc=:match)
+Plots.plot(p1,p2,p3,p4,layout=grid(2,2), legend=true)
+plot!(size=(800,450))savefig("Part_2B3.png")
+
+# mass = 70-120
+lo = 70
+hi = 120
+
+p1= histogram(m_sr, bins=LinRange(lo,hi,100), label= "All charge combinations", xlabel="Mass (GeV/c^2)", lc=:match)
+p2= histogram(m_sr[charge.==2], bins=LinRange(lo,hi,100), label= "2+", xlabel="Mass (GeV/c^2)", lc=:match)
+p3= histogram(m_sr[charge.==-2], bins=LinRange(lo,hi,100), label= "2-", xlabel="Mass (GeV/c^2)", lc=:match)
+p4= histogram(m_sr[charge.==0], bins=LinRange(lo,hi,100), label= "Electrically neutral", xlabel="Mass (GeV/c^2)", lc=:match)
+Plots.plot(p1,p2,p3,p4,layout=grid(2,2), legend=true)
+plot!(size=(800,450))
+savefig("Part_2B4.png")
