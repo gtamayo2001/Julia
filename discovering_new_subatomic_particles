@@ -157,7 +157,8 @@ p2= histogram(m_sr[charge.==2], bins=LinRange(lo,hi,100), label= "2+", xlabel="M
 p3= histogram(m_sr[charge.==-2], bins=LinRange(lo,hi,100), label= "2-", xlabel="Mass (GeV/c^2)", lc=:match)
 p4= histogram(m_sr[charge.==0], bins=LinRange(lo,hi,100), label= "Electrically neutral", xlabel="Mass (GeV/c^2)", lc=:match)
 Plots.plot(p1,p2,p3,p4,layout=grid(2,2), legend=true)
-plot!(size=(800,450))savefig("Part_2B3.png")
+plot!(size=(800,450))
+savefig("Part_2B3.png")
 
 # mass = 70-120
 lo = 70
