@@ -13,9 +13,9 @@ using Plots
 x= 1:10
 y= rand(10)
 
-plot(x,y)            
+Line_Plot_1= plot(x,y)            
 gui()
-savefig("Line_Plot_1.png")
+savefig(Line_Plot_1,"C:/Users/gtama/.julia/logs/Winter2021/Plots/Line_Plot_1.png")    #save fig to a specified folder (right click on folder in vscode and copy path)
 
 gui(plot(x,y))                 
 savefig("Line_Plot_2.png")
