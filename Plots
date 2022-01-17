@@ -1,17 +1,15 @@
 ## Installing Packages
-using Pkg              #must come before Pkg.add()
-
-# if add doesn't work, try "build"
+using Pkg
 Pkg.add("Plots")
 #Pkg.add("Gadfly")
 #Pkg.add("Cairo")      #to export plots
-Pkg.add("Random")     
+Pkg.add("Random")      #if add doesn't work, try "build"
 #Pkg.add("GLMakie")    #data visualization
 
 ## Import libraries
 using Plots
 
-## Line Plot
+## Line Plots
 x= 1:10
 y= rand(10)
 
@@ -22,25 +20,32 @@ savefig("Line_Plot_1.png")
 gui(plot(x,y))                 
 savefig("Line_Plot_2.png")
 
+plot(x,y)                     # gui() is not necessary to save/view plot
+savefig("Line_Plot_3.png")
+
 ## Two Line Plots
 x= 1:10
 y= rand(10,2)                  # 2 columns=2 lines
-gui(plot(x,y, legend=true))    # legend is automatically set to true
-savefig("Line_Plot_3.png")
-
-## Labels
-gui(plot(x,y, xlabel="x", ylabel="y", title="Title"))
+plot(x,y, legend=true)         # legend is automatically set to true
 savefig("Line_Plot_4.png")
 
+## One scatter plot
+scatter(x,y)  
+savefig("Scatter_Plot_2.png")
+
+## Labels
+plot(x,y, xlabel="x", ylabel="y", title="Title")
+savefig("Line_Plot_5.png")
+
 ## Different types of Plots
-p1= plot(x,y)
-p2= plot(x,y,lw=3)
-p3= scatter(x,y)
-p4= histogram(x,y)
+p1= plot(x,y, title="x vs y")
+p2= plot(x,y,lw=3, title="x vs y (with lw)")
+p3= scatter(x,y, title="Scatter")
+p4= histogram(rand(20),bins=10,title="Histogram")
 plot(p1,p2,p3,p4,layout=(2,2), legend=false)
 savefig("Lots_of_Plots.png")
 
-## Aesthetics with Packages
+## Histogram Aesthetics 
 data= randn(100)
 p1= histogram(data, bins=10)
 p2= histogram(data, bins=20, color= :red, lc=:match)
