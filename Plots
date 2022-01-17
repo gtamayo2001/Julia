@@ -9,19 +9,27 @@ Pkg.add("Random")      #if add doesn't work, try "build"
 ## Import libraries
 using Plots
 
+## Function to savefig to specified path
+function savefig_path(name)
+    folder_path= "C:/Users/gtama/.julia/logs/Winter2021/Plots/"   #right click on folder in vscode and copy path
+    path= folder_path*name*".png"
+    return path
+end
+
+
 ## Line Plots
 x= 1:10
 y= rand(10)
 
 Line_Plot_1= plot(x,y)            
 gui()
-savefig(Line_Plot_1,"C:/Users/gtama/.julia/logs/Winter2021/Plots/Line_Plot_1.png")    #save fig to a specified folder (right click on folder in vscode and copy path)
+savefig(Line_Plot_1)                              # this saves the fig to current working directory  
+ 
+Line_Plot_2= plot(x,y)                            # gui() is not necessary to save/view plot                                      
+savefig(Line_Plot_2,savefig_path("C:/Users/gtama/.julia/logs/Winter2021/Plots/Line_Plot_2.png"))   #save fig to a specified folder
 
-gui(plot(x,y))                 
-savefig("Line_Plot_2.png")
-
-plot(x,y)                     # gui() is not necessary to save/view plot
-savefig("Line_Plot_3.png")
+plot(x,y)                     
+savefig(Line_Plot_3,savefig_path("Line_Plot_3"))  # utilize function to save fig to specified folder
 
 ## Two Line Plots
 x= 1:10
@@ -51,3 +59,4 @@ p1= histogram(data, bins=10)
 p2= histogram(data, bins=20, color= :red, lc=:match)
 plot(p1,p2,layout=(1,2), legend=false)
 savefig("Lots_of_Histograms.png")
+
