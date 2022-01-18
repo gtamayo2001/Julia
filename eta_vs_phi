@@ -74,22 +74,23 @@ m = (pmag.^2)./(2*E)
 
 # Eta vs Phi
 
-function etaphi(py,pz,pmag)
-    phi= atan.(py, pz)
+function etaphi(py,px,pz,pmag)
+    phi= atan.(py, px)
     theta= acos.(pz./pmag)
     eta= -log.(tan.(theta./2))
     return eta,phi
 end
 
-scatter(etaphi(py,pz,pmag),title="Muon 1 & Muon 2 Combined", xlabel="eta", ylabel="phi",legend=false)
+
+scatter(etaphi(py,px,pz,pmag),title="Muon 1 & Muon 2 Combined", xlabel="eta", ylabel="phi",color=:green,legend=false)
 savefig(savefig_path("Muon1&Muon2Combined_Scatter"))
 
-scatter(etaphi(py1,pz1,pmag1),title="Eta vs. Phi", xlabel="eta", ylabel="phi",label="Muon 1",lc=:match, alpha=0.2)
-scatter!(etaphi(py2,pz2,pmag2), xlabel="eta", ylabel="phi",label="Muon 2", color=:orange, lc=:match, alpha=0.2)
+scatter(etaphi(py1,px1,pz1,pmag1),title="Eta vs. Phi", xlabel="eta", ylabel="phi",label="Muon 1",lc=:match, alpha=0.2)
+scatter!(etaphi(py2,px2,pz2,pmag2), xlabel="eta", ylabel="phi",label="Muon 2", color=:orange, lc=:match, alpha=0.2)
 savefig(savefig_path("Muon1&Muon2_Scatter")) 
 
-scatter(etaphi(py1,pz1,pmag1),title="Muon 1", xlabel="eta", ylabel="phi",legend=false)
+scatter(etaphi(py1,px1,pz1,pmag1),title="Muon 1", xlabel="eta", ylabel="phi",legend=false)
 savefig(savefig_path("Muon1_Scatter")) 
 
-scatter(etaphi(py2,pz2,pmag2),title="Muon 2", xlabel="eta", ylabel="phi",color=:orange,legend=false)
+scatter(etaphi(py2,px2,pz2,pmag2),title="Muon 2", xlabel="eta", ylabel="phi",color=:orange,legend=false)
 savefig(savefig_path("Muon2_Scatter")) 
